@@ -2,12 +2,18 @@ spring:
   application:
     name: reservations-service
 
-server:
-  servlet:
-    context-path: /api
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/reservations
+    username: postgres
+    password: postgres
+    jpa:
+      hibernate:
+        ddl-auto: validate
 
 springdoc:
   show-actuator: true
-  swagger-ui:
-    path: /swagger-ui.html
-    use-root-path: true
+
+server:
+  servlet:
+    context-path: /api
