@@ -7,4 +7,6 @@ import java.util.Set;
 
 public interface ReservationService {
     Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate);
+
+    Reservation createReservation(Reservation reservation);
 }

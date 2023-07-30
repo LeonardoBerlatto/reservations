@@ -19,7 +19,5 @@ public interface VacanciesApi {
             @ApiResponse(responseCode = "400", description = "Invalid date(s)"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    ResponseEntity<List<VacancyResponse>> getPeriodAvailability(
-            LocalDate startDate,
-            LocalDate endDate);
+    ResponseEntity<List<VacancyResponse>> getPeriodAvailability(LocalDate startDate, LocalDate endDate);
 }

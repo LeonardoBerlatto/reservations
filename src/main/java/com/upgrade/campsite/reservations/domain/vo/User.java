@@ -1,6 +1,13 @@
 package com.upgrade.campsite.reservations.domain.vo;
 
-public class User {
-    private String name;
-    private String email;
+
+import lombok.Getter;
+
+public record User(
+        String email,
+        String name
+) {
+    public static User of(String email, String name) {
+        return new User(email, name);
+    }
 }
