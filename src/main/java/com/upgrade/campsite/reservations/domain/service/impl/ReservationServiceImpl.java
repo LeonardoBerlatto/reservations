@@ -3,6 +3,7 @@ package com.upgrade.campsite.reservations.domain.service.impl;
 import com.upgrade.campsite.reservations.domain.entity.Reservation;
 import com.upgrade.campsite.reservations.domain.repository.ReservationRepository;
 import com.upgrade.campsite.reservations.domain.service.ReservationService;
+import com.upgrade.campsite.reservations.exception.ExistingResourceException;
 import com.upgrade.campsite.reservations.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .stream()
                 .findAny()
                 .ifPresent(r -> {
-                    throw new ValidationException("Reservation not available for the selected period");
+                    throw new ExistingResourceException("Reservation not available for the selected period");
                 });
 
         reservation.setId(UUID.randomUUID());
