@@ -4,8 +4,6 @@ import com.upgrade.campsite.reservations.adapter.rest.representation.response.Va
 import com.upgrade.campsite.reservations.domain.vo.Vacancy;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class VacancyMapper {
 
