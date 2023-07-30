@@ -4,6 +4,7 @@ import com.upgrade.campsite.reservations.domain.entity.Reservation;
 import com.upgrade.campsite.reservations.domain.service.ReservationService;
 import com.upgrade.campsite.reservations.domain.service.VacancyService;
 import com.upgrade.campsite.reservations.domain.vo.Vacancy;
+import com.upgrade.campsite.reservations.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,14 +15,13 @@ import java.util.Set;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class VacancyServiceImpl implements VacancyService {
 
-
     private final ReservationService reservationService;
 
     @Override
     public List<Vacancy> getAvailabilityForPeriod(final LocalDate startDate,
                                                         final LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("Start date must be before end date");
+            throw new ValidationException("Start date must be before end date");
         }
 
         final var reservedDates = reservationService.getReservationsForPeriod(startDate, endDate);
