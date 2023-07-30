@@ -7,6 +7,7 @@ import com.upgrade.campsite.reservations.exception.ExistingResourceException;
 import com.upgrade.campsite.reservations.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -23,9 +24,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation createReservation(Reservation reservation) {
+    public Reservation createReservation(final Reservation reservation) {
         // check date constraints
-        checkReservationDateConstraints(reservation);
+        checkReservationDateConstraints(reservation.getArrivalDate(), reservation.getDepartureDate());
 
         // check availability
         reservationRepository.getReservationsConflictingOnPeriod(reservation.getArrivalDate(), reservation.getDepartureDate())
@@ -41,24 +42,24 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    private void checkReservationDateConstraints(Reservation reservation) {
-        if (reservation.getArrivalDate().isAfter(reservation.getDepartureDate())) {
+    private void checkReservationDateConstraints(final LocalDate arrivalDate, final LocalDate departureDate) {
+        if (arrivalDate.isAfter(departureDate)) {
             throw new ValidationException("Start date must be before end date");
         }
 
-        if (reservation.getArrivalDate().isBefore(LocalDate.now().plusDays(1))) {
+        if (arrivalDate.isBefore(LocalDate.now().plusDays(1))) {
             throw new ValidationException("Start date must be at least 1 day in advance");
         }
 
-        if (reservation.getArrivalDate().isAfter(LocalDate.now().plusMonths(1))) {
+        if (arrivalDate.isAfter(LocalDate.now().plusMonths(1))) {
             throw new ValidationException("Start date must be at most 1 month in advance");
         }
 
-        if (reservation.getArrivalDate().isAfter(reservation.getDepartureDate().minusDays(1))) {
+        if (arrivalDate.isAfter(departureDate.minusDays(1))) {
             throw new ValidationException("Reservation must be at least 1 day long");
         }
 
-        if (reservation.getArrivalDate().isBefore(reservation.getDepartureDate().minusDays(3))) {
+        if (arrivalDate.isBefore(departureDate.minusDays(3))) {
             throw new ValidationException("Reservation must be at most 3 days long");
         }
     }
