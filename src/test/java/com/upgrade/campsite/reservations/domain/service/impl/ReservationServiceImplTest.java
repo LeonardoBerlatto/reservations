@@ -2,6 +2,7 @@ package com.upgrade.campsite.reservations.domain.service.impl;
 
 import com.upgrade.campsite.reservations.domain.entity.Reservation;
 import com.upgrade.campsite.reservations.domain.repository.ReservationRepository;
+import com.upgrade.campsite.reservations.exception.ExistingResourceException;
 import com.upgrade.campsite.reservations.exception.ValidationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.lang.model.util.Types;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -162,7 +165,7 @@ class ReservationServiceImplTest {
 
         // act
         final var exception = assertThrows(
-                ValidationException.class,
+                ExistingResourceException.class,
                 () -> reservationService.createReservation(reservation)
         );
 
