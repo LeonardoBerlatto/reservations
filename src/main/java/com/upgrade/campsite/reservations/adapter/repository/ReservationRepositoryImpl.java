@@ -15,8 +15,20 @@ import java.util.Set;
 public class ReservationRepositoryImpl implements ReservationRepository {
 
     private final ReservationCrudRepository reservationCrudRepository;
+
     @Override
     public Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate) {
         return reservationCrudRepository.findByPeriod(startDate, endDate);
+    }
+
+    @Override
+    public Reservation save(Reservation reservation) {
+        return reservationCrudRepository.save(reservation);
+    }
+
+
+    @Override
+    public Set<Reservation> getReservationsConflictingOnPeriod(LocalDate arrivalDate, LocalDate departureDate) {
+        return reservationCrudRepository.findConflictingReservations(arrivalDate, departureDate);
     }
 }

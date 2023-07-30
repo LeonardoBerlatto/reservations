@@ -16,4 +16,10 @@ public interface ReservationCrudRepository extends CrudRepository<Reservation, U
             "AND (r.arrivalDate <= :endDate OR r.departureDate <= :endDate) " +
             "AND (r.arrivalDate >= :startDate OR r.departureDate >= :startDate)")
     Set<Reservation> findByPeriod(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT r FROM Reservation r " +
+            "WHERE r.active = true " +
+            "AND (r.arrivalDate <= :departureDate OR r.departureDate <= :departureDate) " +
+            "AND (r.arrivalDate >= :arrivalDate OR r.departureDate > :arrivalDate)")
+    Set<Reservation> findConflictingReservations(LocalDate arrivalDate, LocalDate departureDate);
 }
