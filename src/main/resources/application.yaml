@@ -1,3 +1,19 @@
 spring:
   application:
     name: reservations-service
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/reservations
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    jpa:
+      hibernate:
+        ddl-auto: validate
+
+springdoc:
+  show-actuator: true
+
+server:
+  servlet:
+    context-path: /api

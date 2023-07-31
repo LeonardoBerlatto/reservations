@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "42240f4d-c421-45a4-acf7-71db50d6b29d",
+		"name": "Reservations Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4327179"
+	},
+	"item": [
+		{
+			"name": "Reservations",
+			"item": [
+				{
+					"name": "Create reservation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userInfo\" : {\n        \"name\": \"Leonardo Berlatto\",\n        \"email\": \"some.test@email.com\"\n    },\n    \"arrivalDate\": \"2023-08-02\",\n    \"departureDate\": \"2023-08-03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/reservations",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel Reservation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/reservations/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"reservations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "d73b5363-2fbd-4864-8875-20352accb901"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reservation",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userInfo\" : {\n        \"name\": \"Leonardo Berlatto\",\n        \"email\": \"some.test@email.com\"\n    },\n    \"arrivalDate\": \"2023-08-02\",\n    \"departureDate\": \"2023-08-04\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/reservations/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"reservations",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9ce00771-efef-4ec9-afbd-093596319481"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vacancies",
+			"item": [
+				{
+					"name": "Get available dates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/vacancies?startDate=2023-07-29&endDate=2023-08-07",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"vacancies"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2023-07-29"
+								},
+								{
+									"key": "endDate",
+									"value": "2023-08-07"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		}
+	]
+}
