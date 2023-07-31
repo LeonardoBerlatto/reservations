@@ -12,4 +12,6 @@ public interface ReservationService {
     Reservation createReservation(Reservation reservation);
 
     Reservation markReservationAsCancelled(UUID id);
+
+    Reservation updateReservation(UUID id, Reservation reservation);
 }

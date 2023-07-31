@@ -22,6 +22,15 @@ public interface ReservationsApi {
     })
     ResponseEntity<ReservationResponse> createReservation(ReservationRequest request);
 
+    @Operation(summary = "Update a reservation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reservation updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid parameter(s)/Reservation already cancelled"),
+            @ApiResponse(responseCode = "404", description = "Reservation not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    ResponseEntity<ReservationResponse> updateReservation(UUID id, ReservationRequest request);
+
     @Operation(summary = "Cancel a reservation")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Reservation canceled"),

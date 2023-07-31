@@ -210,6 +210,202 @@ class ReservationServiceImplTest {
         }
     }
 
+    @Nested
+    class UpdateReservation {
+
+        @Test
+        @DisplayName("Should not allow update if reservation is not found")
+        void shouldNotAllowUpdateIfReservationIsNotFound() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.empty());
+
+            // act
+            final var exception = assertThrows(
+                    ResourceNotFoundException.class,
+                    () -> reservationService.updateReservation(reservationId, Reservation.builder().build())
+            );
+
+            // assert
+            assertEquals("Reservation not found", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should not allow update if arrival date is not before departure date")
+        void shouldNotAllowUpdateIfStartDateIsNotBeforeEndDate() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            final var startDate = LocalDate.now().plusDays(2);
+            final var endDate = LocalDate.now().plusDays(1);
+
+            final var reservation = Reservation.builder()
+                    .arrivalDate(startDate)
+                    .departureDate(endDate)
+                    .build();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.of(reservation));
+
+            // act
+            final var exception = assertThrows(
+                    ValidationException.class,
+                    () -> reservationService.updateReservation(reservationId, reservation)
+            );
+
+            // assert
+            assertEquals("Start date must be before end date", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should not allow update if arrival date is not at least 1 day in advance")
+        void shouldNotAllowUpdateIfStartDateIsNotAtLeastOneDayInAdvance() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            final var startDate = LocalDate.now();
+            final var endDate = LocalDate.now().plusDays(2);
+
+            final var reservation = Reservation.builder()
+                    .arrivalDate(startDate)
+                    .departureDate(endDate)
+                    .build();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.of(reservation));
+
+            // act
+            final var exception = assertThrows(
+                    ValidationException.class,
+                    () -> reservationService.updateReservation(reservationId, reservation)
+            );
+
+            // assert
+            assertEquals("Start date must be at least 1 day in advance", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should not allow update if arrival date is not at most 1 month in advance")
+        void shouldNotAllowUpdateIfStartDateIsNotAtMostOneMonthInAdvance() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            final var startDate = LocalDate.now().plusDays(32);
+            final var endDate = LocalDate.now().plusDays(34);
+
+            final var reservation = Reservation.builder()
+                    .arrivalDate(startDate)
+                    .departureDate(endDate)
+                    .build();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.of(reservation));
+
+            // act
+            final var exception = assertThrows(
+                    ValidationException.class,
+                    () -> reservationService.updateReservation(reservationId, reservation)
+            );
+
+            // assert
+            assertEquals("Start date must be at most 1 month in advance", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should not allow update if stay is more than 3 days")
+        void shouldNotAllowUpdateIfStayIsMoreThanThreeDays() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            final var startDate = LocalDate.now().plusDays(1);
+            final var endDate = LocalDate.now().plusDays(5);
+
+            final var reservation = Reservation.builder()
+                    .arrivalDate(startDate)
+                    .departureDate(endDate)
+                    .build();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.of(reservation));
+
+            // act
+            final var exception = assertThrows(
+                    ValidationException.class,
+                    () -> reservationService.updateReservation(reservationId, reservation)
+            );
+
+            // assert
+            assertEquals("Reservation must be at most 3 days long", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should not allow update if period is not available")
+        void shouldNotAllowUpdateIfPeriodIsNotAvailable() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            final var startDate = LocalDate.now().plusDays(1);
+            final var endDate = LocalDate.now().plusDays(3);
+
+            final var reservation = Reservation.builder()
+                    .arrivalDate(startDate)
+                    .departureDate(endDate)
+                    .build();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.of(reservation));
+
+            when(reservationRepository.getReservationsConflictingOnPeriod(any(), any()))
+                    .thenReturn(Set.of(Reservation.builder().build()));
+
+            // act
+            final var exception = assertThrows(
+                    ExistingResourceException.class,
+                    () -> reservationService.updateReservation(reservationId, reservation)
+            );
+
+            // assert
+            assertEquals("Reservation not available for the selected period", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Should allow update if period is available and reservation exists")
+        void shouldAllowUpdateIfPeriodIsAvailableAndReservationExists() {
+            // arrange
+            final var reservationId = UUID.randomUUID();
+
+            final var startDate = LocalDate.now().plusDays(1);
+            final var endDate = LocalDate.now().plusDays(3);
+
+            final var existing = Reservation.builder()
+                    .id(reservationId)
+                    .arrivalDate(startDate)
+                    .departureDate(endDate)
+                    .build();
+
+            when(reservationRepository.findById(any())).thenReturn(Optional.of(existing));
+
+            when(reservationRepository.getReservationsConflictingOnPeriod(any(), any()))
+                    .thenReturn(Set.of());
+
+            final var newReservation = Reservation.builder()
+                    .arrivalDate(LocalDate.now().plusDays(2))
+                    .departureDate(LocalDate.now().plusDays(4))
+                    .build();
+
+
+            when(reservationRepository.save(any())).thenReturn(newReservation);
+
+            // act
+            final var result = reservationService.updateReservation(reservationId, newReservation);
+
+            // assert
+            verify(reservationRepository).save(reservationCaptor.capture());
+
+            final var savedReservation = reservationCaptor.getValue();
+
+            assertEquals(newReservation.getArrivalDate(), savedReservation.getArrivalDate());
+            assertEquals(newReservation.getDepartureDate(), savedReservation.getDepartureDate());
+            assertNotNull(result);
+        }
+
+    }
 
     @Nested
     class MarkReservationAsCancelled {
