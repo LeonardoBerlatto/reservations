@@ -4,6 +4,7 @@ import com.upgrade.campsite.reservations.domain.entity.Reservation;
 import com.upgrade.campsite.reservations.domain.repository.ReservationRepository;
 import com.upgrade.campsite.reservations.domain.service.ReservationService;
 import com.upgrade.campsite.reservations.exception.ExistingResourceException;
+import com.upgrade.campsite.reservations.exception.ResourceNotFoundException;
 import com.upgrade.campsite.reservations.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,20 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setId(UUID.randomUUID());
         reservation.setActive(true);
+
+        return reservationRepository.save(reservation);
+    }
+
+    @Override
+    public Reservation markReservationAsCancelled(final UUID id) {
+        final var reservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+
+        if (!reservation.isActive()) {
+            throw new ValidationException("Reservation already cancelled");
+        }
+
+        reservation.setActive(false);
 
         return reservationRepository.save(reservation);
     }
