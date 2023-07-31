@@ -3,6 +3,7 @@ version: '3.4'
 services:
   reservations:
     image: reservations
+    container_name: reservations
     build: .
     ports:
       - "8080:8080"
@@ -18,6 +19,7 @@ services:
 
   reservations-db:
     image: postgres:11
+    container_name: reservations-db
     restart: always
     environment:
       POSTGRES_USER: postgres
