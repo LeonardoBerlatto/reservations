@@ -19,6 +19,11 @@ I chose SQL because it's easier to work with and it's more reliable than NoSQL.
 <br>
 And, since the text mentioned to take extra care with performance, I thought that SQL would be a better choice.
 
+## ⏲️ Things I'd improve with more time
+1. Add cache to /vacancies endpoint since it must be the most called endpoint
+2. Decope the domain from spring data (create JPA entity on another class on adapter package)
+3. Use domain-specific exceptions and RestException only on the adapter leayer
+
 ## ⏯️ Running the code
 1. Build with Gradle
 2. Deploy a container with postgres on port 5432(check [application-dev.yml](src/main/resources/application-dev.yaml))
