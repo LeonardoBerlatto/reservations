@@ -12,7 +12,7 @@ public class SwaggerConfig {
         return new Info()
                 .title("Campsite Reservations API")
                 .description("Campsite Reservations Service")
-                .version("v0.0.1");
+                .version("v1.0.0");
     }
 
     @Bean
