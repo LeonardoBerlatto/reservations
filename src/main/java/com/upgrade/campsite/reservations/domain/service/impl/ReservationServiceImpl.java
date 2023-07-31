@@ -25,7 +25,14 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation createReservation(final Reservation reservation) {
-        validateDates(reservation.getArrivalDate(), reservation.getDepartureDate());
+        checkReservationDateConstraints(reservation.getArrivalDate(), reservation.getDepartureDate());
+
+        reservationRepository.getReservationsConflictingOnPeriod(reservation.getArrivalDate(), reservation.getDepartureDate())
+                .stream()
+                .findAny()
+                .ifPresent(r -> {
+                    throw new ExistingResourceException("Reservation not available for the selected period");
+                });
 
         reservation.setId(UUID.randomUUID());
         reservation.setActive(true);
@@ -33,23 +40,21 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    private void validateDates(LocalDate arrivalDate, LocalDate departureDate) {
-        checkReservationDateConstraints(arrivalDate, departureDate);
-
-        reservationRepository.getReservationsConflictingOnPeriod(arrivalDate, departureDate)
-                .stream()
-                .findAny()
-                .ifPresent(r -> {
-                    throw new ExistingResourceException("Reservation not available for the selected period");
-                });
-    }
-
     @Override
     public Reservation updateReservation(final UUID id, final Reservation request) {
         final var existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
 
-        validateDates(request.getArrivalDate(), request.getDepartureDate());
+
+        checkReservationDateConstraints(request.getArrivalDate(), request.getDepartureDate());
+
+        reservationRepository.getReservationsConflictingOnPeriod(request.getArrivalDate(), request.getDepartureDate())
+                .stream()
+                .filter(reservation -> !id.equals(reservation.getId()))
+                .findAny()
+                .ifPresent(r -> {
+                    throw new ExistingResourceException("Reservation not available for the selected period");
+                });
 
         existingReservation.setArrivalDate(request.getArrivalDate());
         existingReservation.setDepartureDate(request.getDepartureDate());
