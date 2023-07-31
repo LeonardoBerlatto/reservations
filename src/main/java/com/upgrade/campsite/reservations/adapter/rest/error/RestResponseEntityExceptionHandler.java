@@ -2,6 +2,7 @@ package com.upgrade.campsite.reservations.adapter.rest.error;
 
 import com.upgrade.campsite.reservations.adapter.rest.representation.response.ErrorResponse;
 import com.upgrade.campsite.reservations.exception.ExistingResourceException;
+import com.upgrade.campsite.reservations.exception.ResourceNotFoundException;
 import com.upgrade.campsite.reservations.exception.RestException;
 import com.upgrade.campsite.reservations.exception.ValidationException;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,11 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {ValidationException.class, ExistingResourceException.class})
+    @ExceptionHandler(value = {
+            ValidationException.class,
+            ExistingResourceException.class,
+            ResourceNotFoundException.class,
+    })
     public ResponseEntity<ErrorResponse> handleBadRequestException(RestException exception) {
         return buildResponseEntity(exception);
     }

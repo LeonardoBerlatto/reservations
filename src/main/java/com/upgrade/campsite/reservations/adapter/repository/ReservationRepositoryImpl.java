@@ -8,13 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ReservationRepositoryImpl implements ReservationRepository {
 
     private final ReservationCrudRepository reservationCrudRepository;
+
+    @Override
+    public Optional<Reservation> findById(UUID id) {
+        return reservationCrudRepository.findById(id);
+    }
 
     @Override
     public Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate) {

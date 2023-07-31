@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.UUID;
+
 @Tag(name = "Reservations", description = "Reservations endpoints")
 public interface ReservationsApi {
 
@@ -18,5 +20,14 @@ public interface ReservationsApi {
             @ApiResponse(responseCode = "409", description = "Reservation already exists for date(s)"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    ResponseEntity<ReservationResponse> createReservation(ReservationRequest reservationRequest);
+    ResponseEntity<ReservationResponse> createReservation(ReservationRequest request);
+
+    @Operation(summary = "Cancel a reservation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Reservation canceled"),
+            @ApiResponse(responseCode = "400", description = "Invalid parameter(s)/Reservation already cancelled"),
+            @ApiResponse(responseCode = "404", description = "Reservation not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    ResponseEntity<Void> cancelReservation(UUID id);
 }
