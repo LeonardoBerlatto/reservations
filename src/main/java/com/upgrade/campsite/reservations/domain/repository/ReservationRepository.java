@@ -15,4 +15,6 @@ public interface ReservationRepository {
     Set<Reservation> getReservationsConflictingOnPeriod(LocalDate arrivalDate, LocalDate departureDate);
 
     Optional<Reservation> findById(UUID id);
+
+    void deleteAll();
 }

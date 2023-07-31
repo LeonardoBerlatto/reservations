@@ -38,4 +38,9 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public Set<Reservation> getReservationsConflictingOnPeriod(LocalDate arrivalDate, LocalDate departureDate) {
         return reservationCrudRepository.findConflictingReservations(arrivalDate, departureDate);
     }
+
+    @Override
+    public void deleteAll() {
+        reservationCrudRepository.deleteAll();
+    }
 }

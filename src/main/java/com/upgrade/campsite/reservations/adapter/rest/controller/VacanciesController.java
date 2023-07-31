@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -26,8 +27,8 @@ public class VacanciesController implements VacanciesApi {
     @Override
     @GetMapping
     public ResponseEntity<List<VacancyResponse>> getPeriodAvailability(
-            LocalDate startDate,
-            LocalDate endDate) {
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate) {
         return ResponseEntity.ok(
                 vacancyService.getAvailabilityForPeriod(startDate, endDate)
                 .stream()

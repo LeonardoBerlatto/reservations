@@ -18,8 +18,13 @@ public class VacancyServiceImpl implements VacancyService {
     private final ReservationService reservationService;
 
     @Override
-    public List<Vacancy> getAvailabilityForPeriod(final LocalDate startDate,
-                                                        final LocalDate endDate) {
+    public List<Vacancy> getAvailabilityForPeriod(LocalDate startDate,
+                                                  LocalDate endDate) {
+        if (startDate == null || endDate == null) {
+            startDate = LocalDate.now();
+            endDate = startDate.plusMonths(1);
+        }
+
         if (startDate.isAfter(endDate)) {
             throw new ValidationException("Start date must be before end date");
         }
