@@ -43,6 +43,29 @@ class ReservationServiceImplTest {
     private ArgumentCaptor<Reservation> reservationCaptor;
 
     @Nested
+    class GetReservationsForPeriod {
+
+        @Test
+        @DisplayName("Should return a list of reservations for the given period")
+        void shouldReturnAListOfReservationsForTheGivenPeriod() {
+            // arrange
+            final var startDate = LocalDate.now();
+            final var endDate = LocalDate.now().plusDays(1);
+
+            when(reservationRepository.getReservationsForPeriod(any(), any()))
+                    .thenReturn(Set.of());
+
+            // act
+            final var reservations = reservationService.getReservationsForPeriod(startDate, endDate);
+
+            // assert
+            verify(reservationRepository).getReservationsForPeriod(startDate, endDate);
+            assertNotNull(reservations);
+        }
+
+    }
+
+    @Nested
     class CreateReservation {
 
         @Test
