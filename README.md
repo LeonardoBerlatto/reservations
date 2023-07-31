@@ -20,10 +20,12 @@ I chose SQL because it's easier to work with and it's more reliable than NoSQL.
 And, since the text mentioned to take extra care with performance, I thought that SQL would be a better choice.
 
 ## ⏲️ Things I'd improve with more time
-1. Add cache to /vacancies endpoint since it must be the most called endpoint
-2. Decope the domain from spring data (create JPA entity on another class on adapter package)
-3. Use domain-specific exceptions and RestException only on the adapter leayer
-4. Add workflow to publish docker image when pushing to main branch
+1. Implement clean architecture for real
+2. Decouple the domain from spring data (create JPA entity on another class on adapter package)
+3. Move @Transactional to the use case (application) layer
+4. Add cache to /vacancies endpoint since it must be the most called endpoint
+5. Use domain-specific exceptions and RestException only on the adapter layer 
+6. 6.Add workflow to publish docker image when pushing to main branch
 
 ## ⏯️ Running the code
 1. Build with Gradle

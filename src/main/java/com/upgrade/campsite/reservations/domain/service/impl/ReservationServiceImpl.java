@@ -8,6 +8,7 @@ import com.upgrade.campsite.reservations.exception.ResourceNotFoundException;
 import com.upgrade.campsite.reservations.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -24,6 +25,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public Reservation create(final Reservation reservation) {
         checkReservationDateConstraints(reservation.getArrivalDate(), reservation.getDepartureDate());
 
@@ -41,6 +43,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public Reservation update(final UUID id, final Reservation request) {
         final var existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
@@ -64,6 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public Reservation markAsCancelled(final UUID id) {
         final var reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
