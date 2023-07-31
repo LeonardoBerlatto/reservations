@@ -10,12 +10,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class UserInformation {
 
     private String email;
     private String name;
 
-    public static User of(String email, String name) {
-        return new User(email, name);
+    public static UserInformation of(String email, String name) {
+        return new UserInformation(email, name);
     }
 }

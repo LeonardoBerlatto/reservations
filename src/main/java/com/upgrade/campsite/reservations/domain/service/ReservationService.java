@@ -7,11 +7,11 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface ReservationService {
-    Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate);
+    Set<Reservation> getForPeriod(LocalDate startDate, LocalDate endDate);
 
-    Reservation createReservation(Reservation reservation);
+    Reservation create(Reservation reservation);
 
-    Reservation markReservationAsCancelled(UUID id);
+    Reservation markAsCancelled(UUID id);
 
-    Reservation updateReservation(UUID id, Reservation reservation);
+    Reservation update(UUID id, Reservation reservation);
 }

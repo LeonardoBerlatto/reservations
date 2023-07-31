@@ -2,7 +2,7 @@ package com.upgrade.campsite.reservations.integration;
 
 import com.upgrade.campsite.reservations.domain.entity.Reservation;
 import com.upgrade.campsite.reservations.domain.repository.ReservationRepository;
-import com.upgrade.campsite.reservations.domain.vo.User;
+import com.upgrade.campsite.reservations.domain.vo.UserInformation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -82,7 +82,7 @@ class VacanciesControllerIT {
                 .id(UUID.randomUUID())
                 .arrivalDate(startDate)
                 .departureDate(endDate)
-                .user(User.of("John Doe", "test@email.com"))
+                .userInformation(UserInformation.of("John Doe", "test@email.com"))
                 .active(true)
                 .build());
 

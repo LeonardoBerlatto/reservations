@@ -24,7 +24,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate) {
+    public Set<Reservation> getForPeriod(LocalDate startDate, LocalDate endDate) {
         return reservationCrudRepository.findByPeriod(startDate, endDate);
     }
 
@@ -35,7 +35,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
 
     @Override
-    public Set<Reservation> getReservationsConflictingOnPeriod(LocalDate arrivalDate, LocalDate departureDate) {
+    public Set<Reservation> findConflictingByArrivalDateAndDepartureDate(LocalDate arrivalDate, LocalDate departureDate) {
         return reservationCrudRepository.findConflictingReservations(arrivalDate, departureDate);
     }
 

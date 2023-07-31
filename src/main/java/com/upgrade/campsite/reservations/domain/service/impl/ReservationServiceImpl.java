@@ -19,15 +19,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
     @Override
-    public Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate) {
-        return reservationRepository.getReservationsForPeriod(startDate, endDate);
+    public Set<Reservation> getForPeriod(LocalDate startDate, LocalDate endDate) {
+        return reservationRepository.getForPeriod(startDate, endDate);
     }
 
     @Override
-    public Reservation createReservation(final Reservation reservation) {
+    public Reservation create(final Reservation reservation) {
         checkReservationDateConstraints(reservation.getArrivalDate(), reservation.getDepartureDate());
 
-        reservationRepository.getReservationsConflictingOnPeriod(reservation.getArrivalDate(), reservation.getDepartureDate())
+        reservationRepository.findConflictingByArrivalDateAndDepartureDate(reservation.getArrivalDate(), reservation.getDepartureDate())
                 .stream()
                 .findAny()
                 .ifPresent(r -> {
@@ -41,14 +41,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation updateReservation(final UUID id, final Reservation request) {
+    public Reservation update(final UUID id, final Reservation request) {
         final var existingReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
 
 
         checkReservationDateConstraints(request.getArrivalDate(), request.getDepartureDate());
 
-        reservationRepository.getReservationsConflictingOnPeriod(request.getArrivalDate(), request.getDepartureDate())
+        reservationRepository.findConflictingByArrivalDateAndDepartureDate(request.getArrivalDate(), request.getDepartureDate())
                 .stream()
                 .filter(reservation -> !id.equals(reservation.getId()))
                 .findAny()
@@ -58,13 +58,13 @@ public class ReservationServiceImpl implements ReservationService {
 
         existingReservation.setArrivalDate(request.getArrivalDate());
         existingReservation.setDepartureDate(request.getDepartureDate());
-        existingReservation.setUser(request.getUser());
+        existingReservation.setUserInformation(request.getUserInformation());
 
         return reservationRepository.save(existingReservation);
     }
 
     @Override
-    public Reservation markReservationAsCancelled(final UUID id) {
+    public Reservation markAsCancelled(final UUID id) {
         final var reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
 

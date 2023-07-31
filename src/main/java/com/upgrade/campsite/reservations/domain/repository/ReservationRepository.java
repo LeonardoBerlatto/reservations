@@ -8,11 +8,11 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface ReservationRepository {
-    Set<Reservation> getReservationsForPeriod(LocalDate startDate, LocalDate endDate);
+    Set<Reservation> getForPeriod(LocalDate startDate, LocalDate endDate);
 
     Reservation save(Reservation reservation);
 
-    Set<Reservation> getReservationsConflictingOnPeriod(LocalDate arrivalDate, LocalDate departureDate);
+    Set<Reservation> findConflictingByArrivalDateAndDepartureDate(LocalDate arrivalDate, LocalDate departureDate);
 
     Optional<Reservation> findById(UUID id);
 

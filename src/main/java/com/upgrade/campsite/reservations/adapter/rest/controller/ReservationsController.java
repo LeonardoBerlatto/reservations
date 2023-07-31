@@ -33,7 +33,7 @@ public class ReservationsController implements ReservationsApi {
     @Override
     @PostMapping
     public ResponseEntity<ReservationResponse> createReservation(@RequestBody @Valid final ReservationRequest request) {
-        final var reservation = reservationService.createReservation(reservationMapper.toReservation(request));
+        final var reservation = reservationService.create(reservationMapper.toReservation(request));
 
         return ResponseEntity
                 .status(CREATED)
@@ -42,8 +42,9 @@ public class ReservationsController implements ReservationsApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationResponse> updateReservation(@PathVariable final UUID id, @RequestBody @Valid final ReservationRequest request) {
-        final var reservation = reservationService.updateReservation(id, reservationMapper.toReservation(request));
+    public ResponseEntity<ReservationResponse> updateReservation(@PathVariable final UUID id,
+                                                                 @RequestBody @Valid final ReservationRequest request) {
+        final var reservation = reservationService.update(id, reservationMapper.toReservation(request));
 
         return ResponseEntity
                 .ok()
@@ -53,7 +54,7 @@ public class ReservationsController implements ReservationsApi {
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable final UUID id) {
-        reservationService.markReservationAsCancelled(id);
+        reservationService.markAsCancelled(id);
 
         return ResponseEntity
                 .noContent()

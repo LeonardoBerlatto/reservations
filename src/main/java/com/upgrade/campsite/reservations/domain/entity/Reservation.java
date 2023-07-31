@@ -1,7 +1,7 @@
 package com.upgrade.campsite.reservations.domain.entity;
 
 
-import com.upgrade.campsite.reservations.domain.vo.User;
+import com.upgrade.campsite.reservations.domain.vo.UserInformation;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -29,7 +29,7 @@ public class Reservation {
     @Embedded
     @AttributeOverride(name = "name", column = @Column(name = "user_name"))
     @AttributeOverride(name = "email", column = @Column(name = "user_email"))
-    private User user;
+    private UserInformation userInformation;
     private LocalDate arrivalDate;
     private LocalDate departureDate;
     private boolean active;

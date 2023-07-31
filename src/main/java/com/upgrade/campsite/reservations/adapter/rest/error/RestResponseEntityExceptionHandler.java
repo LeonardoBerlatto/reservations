@@ -28,6 +28,15 @@ public class RestResponseEntityExceptionHandler {
         return buildResponseEntity(exception);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
+        final var errors = exception.getBindingResult().getFieldErrors();
+
+        final var validationException = new ValidationException(errors.get(0).getDefaultMessage());
+
+        return buildResponseEntity(validationException);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception exception) {
         final var response = new ErrorResponse(
@@ -37,19 +46,7 @@ public class RestResponseEntityExceptionHandler {
         );
 
         logger.error("Unexpected error", exception);
-
-
         return ResponseEntity.status(500).body(response);
-    }
-
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
-        final var errors = exception.getBindingResult().getFieldErrors();
-
-        final var validationException = new ValidationException(errors.get(0).getDefaultMessage());
-
-        return buildResponseEntity(validationException);
     }
 
     private ResponseEntity<ErrorResponse> buildResponseEntity(final RestException exception) {

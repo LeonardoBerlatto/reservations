@@ -45,14 +45,14 @@ class VacancyServiceImplTest {
         final var startDate = LocalDate.now();
         final var endDate = LocalDate.now().plusDays(1);
 
-        when(reservationService.getReservationsForPeriod(any(), any()))
+        when(reservationService.getForPeriod(any(), any()))
                 .thenReturn(Set.of());
 
         // act
         final var vacancies = vacancyService.getAvailabilityForPeriod(startDate, endDate);
 
         // assert
-        verify(reservationService).getReservationsForPeriod(startDate, endDate);
+        verify(reservationService).getForPeriod(startDate, endDate);
         assertNotNull(vacancies);
     }
 
@@ -60,14 +60,14 @@ class VacancyServiceImplTest {
     @DisplayName("Should return a list of vacancies when start date and end date are null")
     void shouldReturnAListOfVacanciesWhenStartDateAndEndDateAreNull() {
         // arrange
-        when(reservationService.getReservationsForPeriod(any(), any()))
+        when(reservationService.getForPeriod(any(), any()))
                 .thenReturn(Set.of());
 
         // act
         final var vacancies = vacancyService.getAvailabilityForPeriod(null, null);
 
         // assert
-        verify(reservationService).getReservationsForPeriod(any(), any());
+        verify(reservationService).getForPeriod(any(), any());
         assertNotNull(vacancies);
     }
 }

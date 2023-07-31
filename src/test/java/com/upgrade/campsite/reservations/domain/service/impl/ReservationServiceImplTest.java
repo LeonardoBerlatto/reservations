@@ -52,14 +52,14 @@ class ReservationServiceImplTest {
             final var startDate = LocalDate.now();
             final var endDate = LocalDate.now().plusDays(1);
 
-            when(reservationRepository.getReservationsForPeriod(any(), any()))
+            when(reservationRepository.getForPeriod(any(), any()))
                     .thenReturn(Set.of());
 
             // act
-            final var reservations = reservationService.getReservationsForPeriod(startDate, endDate);
+            final var reservations = reservationService.getForPeriod(startDate, endDate);
 
             // assert
-            verify(reservationRepository).getReservationsForPeriod(startDate, endDate);
+            verify(reservationRepository).getForPeriod(startDate, endDate);
             assertNotNull(reservations);
         }
 
@@ -83,7 +83,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.createReservation(reservation)
+                    () -> reservationService.create(reservation)
             );
 
             // assert
@@ -105,7 +105,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.createReservation(reservation)
+                    () -> reservationService.create(reservation)
             );
 
             // assert
@@ -127,7 +127,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.createReservation(reservation)
+                    () -> reservationService.create(reservation)
             );
 
             // assert
@@ -149,7 +149,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.createReservation(reservation)
+                    () -> reservationService.create(reservation)
             );
 
             // assert
@@ -171,7 +171,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.createReservation(reservation)
+                    () -> reservationService.create(reservation)
             );
 
             // assert
@@ -185,7 +185,7 @@ class ReservationServiceImplTest {
             final var startDate = LocalDate.now().plusDays(1);
             final var endDate = LocalDate.now().plusDays(3);
 
-            when(reservationRepository.getReservationsConflictingOnPeriod(any(), any()))
+            when(reservationRepository.findConflictingByArrivalDateAndDepartureDate(any(), any()))
                     .thenReturn(Set.of(Reservation.builder().build()));
 
             final var reservation = Reservation.builder()
@@ -196,7 +196,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ExistingResourceException.class,
-                    () -> reservationService.createReservation(reservation)
+                    () -> reservationService.create(reservation)
             );
 
             // assert
@@ -210,7 +210,7 @@ class ReservationServiceImplTest {
             final var startDate = LocalDate.now().plusDays(1);
             final var endDate = LocalDate.now().plusDays(3);
 
-            when(reservationRepository.getReservationsConflictingOnPeriod(any(), any()))
+            when(reservationRepository.findConflictingByArrivalDateAndDepartureDate(any(), any()))
                     .thenReturn(Set.of());
 
             final var reservation = Reservation.builder()
@@ -221,7 +221,7 @@ class ReservationServiceImplTest {
             when(reservationRepository.save(any())).thenReturn(reservation);
 
             // act
-            final var result = reservationService.createReservation(reservation);
+            final var result = reservationService.create(reservation);
 
             // assert
             verify(reservationRepository).save(reservationCaptor.capture());
@@ -247,7 +247,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ResourceNotFoundException.class,
-                    () -> reservationService.updateReservation(reservationId, Reservation.builder().build())
+                    () -> reservationService.update(reservationId, Reservation.builder().build())
             );
 
             // assert
@@ -273,7 +273,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.updateReservation(reservationId, reservation)
+                    () -> reservationService.update(reservationId, reservation)
             );
 
             // assert
@@ -299,7 +299,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.updateReservation(reservationId, reservation)
+                    () -> reservationService.update(reservationId, reservation)
             );
 
             // assert
@@ -325,7 +325,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.updateReservation(reservationId, reservation)
+                    () -> reservationService.update(reservationId, reservation)
             );
 
             // assert
@@ -351,7 +351,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.updateReservation(reservationId, reservation)
+                    () -> reservationService.update(reservationId, reservation)
             );
 
             // assert
@@ -375,13 +375,13 @@ class ReservationServiceImplTest {
 
             when(reservationRepository.findById(any())).thenReturn(Optional.of(reservation));
 
-            when(reservationRepository.getReservationsConflictingOnPeriod(any(), any()))
+            when(reservationRepository.findConflictingByArrivalDateAndDepartureDate(any(), any()))
                     .thenReturn(Set.of(Reservation.builder().build()));
 
             // act
             final var exception = assertThrows(
                     ExistingResourceException.class,
-                    () -> reservationService.updateReservation(reservationId, reservation)
+                    () -> reservationService.update(reservationId, reservation)
             );
 
             // assert
@@ -405,7 +405,7 @@ class ReservationServiceImplTest {
 
             when(reservationRepository.findById(any())).thenReturn(Optional.of(existing));
 
-            when(reservationRepository.getReservationsConflictingOnPeriod(any(), any()))
+            when(reservationRepository.findConflictingByArrivalDateAndDepartureDate(any(), any()))
                     .thenReturn(Set.of());
 
             final var newReservation = Reservation.builder()
@@ -417,7 +417,7 @@ class ReservationServiceImplTest {
             when(reservationRepository.save(any())).thenReturn(newReservation);
 
             // act
-            final var result = reservationService.updateReservation(reservationId, newReservation);
+            final var result = reservationService.update(reservationId, newReservation);
 
             // assert
             verify(reservationRepository).save(reservationCaptor.capture());
@@ -445,7 +445,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ResourceNotFoundException.class,
-                    () -> reservationService.markReservationAsCancelled(reservationId)
+                    () -> reservationService.markAsCancelled(reservationId)
             );
 
             // assert
@@ -468,7 +468,7 @@ class ReservationServiceImplTest {
             // act
             final var exception = assertThrows(
                     ValidationException.class,
-                    () -> reservationService.markReservationAsCancelled(reservationId)
+                    () -> reservationService.markAsCancelled(reservationId)
             );
 
             // assert
@@ -491,7 +491,7 @@ class ReservationServiceImplTest {
             when(reservationRepository.save(any())).thenReturn(reservation);
 
             // act
-            final var result = reservationService.markReservationAsCancelled(reservationId);
+            final var result = reservationService.markAsCancelled(reservationId);
 
             // assert
             verify(reservationRepository).save(reservationCaptor.capture());

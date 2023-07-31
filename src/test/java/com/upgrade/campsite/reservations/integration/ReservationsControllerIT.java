@@ -2,7 +2,7 @@ package com.upgrade.campsite.reservations.integration;
 
 import com.upgrade.campsite.reservations.domain.entity.Reservation;
 import com.upgrade.campsite.reservations.domain.repository.ReservationRepository;
-import com.upgrade.campsite.reservations.domain.vo.User;
+import com.upgrade.campsite.reservations.domain.vo.UserInformation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -251,7 +251,7 @@ class ReservationsControllerIT {
                 .arrivalDate(LocalDate.now().plusDays(1))
                 .departureDate(LocalDate.now().plusDays(2))
                 .active(true)
-                .user(User.of("test@email.com", "John Doe"))
+                .userInformation(UserInformation.of("test@email.com", "John Doe"))
                 .build();
 
        return reservationRepository.save(reservation).getId();

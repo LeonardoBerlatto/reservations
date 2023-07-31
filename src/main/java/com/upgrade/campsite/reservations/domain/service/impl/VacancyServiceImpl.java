@@ -29,12 +29,12 @@ public class VacancyServiceImpl implements VacancyService {
             throw new ValidationException("Start date must be before end date");
         }
 
-        final var reservedDates = reservationService.getReservationsForPeriod(startDate, endDate);
+        final var reservationServiceForPeriod = reservationService.getForPeriod(startDate, endDate);
 
         List<LocalDate> datesBetween = startDate.datesUntil(endDate).toList();
 
         return datesBetween.stream()
-                .map(date -> new Vacancy(date, !dateHasReservation(reservedDates, date)))
+                .map(date -> new Vacancy(date, !dateHasReservation(reservationServiceForPeriod, date)))
                 .toList();
     }
 

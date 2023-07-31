@@ -17,7 +17,7 @@ public class ReservationMapper {
         return Reservation.builder()
                 .arrivalDate(reservationRequest.arrivalDate())
                 .departureDate(reservationRequest.departureDate())
-                .user(userInfoMapper.toUser(reservationRequest.userInfo()))
+                .userInformation(userInfoMapper.toUser(reservationRequest.userInfo()))
                 .build();
     }
 
@@ -26,7 +26,7 @@ public class ReservationMapper {
                 reservation.getId(),
                 reservation.getArrivalDate(),
                 reservation.getDepartureDate(),
-                userInfoMapper.toRepresentation(reservation.getUser()),
+                userInfoMapper.toRepresentation(reservation.getUserInformation()),
                 reservation.isActive()
         );
     }
