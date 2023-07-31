@@ -5,8 +5,10 @@ import com.upgrade.campsite.reservations.adapter.rest.ReservationsApi;
 import com.upgrade.campsite.reservations.adapter.rest.representation.request.ReservationRequest;
 import com.upgrade.campsite.reservations.adapter.rest.representation.response.ReservationResponse;
 import com.upgrade.campsite.reservations.domain.service.ReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,7 @@ public class ReservationsController implements ReservationsApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<ReservationResponse> createReservation(@RequestBody final ReservationRequest request) {
+    public ResponseEntity<ReservationResponse> createReservation(@RequestBody @Valid final ReservationRequest request) {
         final var reservation = reservationService.createReservation(reservationMapper.toReservation(request));
 
         return ResponseEntity
@@ -41,7 +43,7 @@ public class ReservationsController implements ReservationsApi {
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationResponse> updateReservation(@PathVariable final UUID id, @RequestBody final ReservationRequest request) {
+    public ResponseEntity<ReservationResponse> updateReservation(@PathVariable @Valid final UUID id, @RequestBody final ReservationRequest request) {
         final var reservation = reservationService.updateReservation(id, reservationMapper.toReservation(request));
 
         return ResponseEntity
