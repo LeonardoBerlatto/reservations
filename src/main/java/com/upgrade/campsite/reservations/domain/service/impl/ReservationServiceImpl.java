@@ -25,21 +25,37 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation createReservation(final Reservation reservation) {
-        // check date constraints
-        checkReservationDateConstraints(reservation.getArrivalDate(), reservation.getDepartureDate());
-
-        // check availability
-        reservationRepository.getReservationsConflictingOnPeriod(reservation.getArrivalDate(), reservation.getDepartureDate())
-                .stream()
-                .findAny()
-                .ifPresent(r -> {
-                    throw new ExistingResourceException("Reservation not available for the selected period");
-                });
+        validateDates(reservation.getArrivalDate(), reservation.getDepartureDate());
 
         reservation.setId(UUID.randomUUID());
         reservation.setActive(true);
 
         return reservationRepository.save(reservation);
+    }
+
+    private void validateDates(LocalDate arrivalDate, LocalDate departureDate) {
+        checkReservationDateConstraints(arrivalDate, departureDate);
+
+        reservationRepository.getReservationsConflictingOnPeriod(arrivalDate, departureDate)
+                .stream()
+                .findAny()
+                .ifPresent(r -> {
+                    throw new ExistingResourceException("Reservation not available for the selected period");
+                });
+    }
+
+    @Override
+    public Reservation updateReservation(final UUID id, final Reservation request) {
+        final var existingReservation = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+
+        validateDates(request.getArrivalDate(), request.getDepartureDate());
+
+        existingReservation.setArrivalDate(request.getArrivalDate());
+        existingReservation.setDepartureDate(request.getDepartureDate());
+        existingReservation.setUser(request.getUser());
+
+        return reservationRepository.save(existingReservation);
     }
 
     @Override
