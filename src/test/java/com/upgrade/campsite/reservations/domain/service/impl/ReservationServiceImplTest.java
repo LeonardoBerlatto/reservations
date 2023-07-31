@@ -345,6 +345,7 @@ class ReservationServiceImplTest {
             final var endDate = LocalDate.now().plusDays(3);
 
             final var reservation = Reservation.builder()
+                    .id(UUID.randomUUID())
                     .arrivalDate(startDate)
                     .departureDate(endDate)
                     .build();
