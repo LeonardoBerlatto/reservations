@@ -23,6 +23,7 @@ And, since the text mentioned to take extra care with performance, I thought tha
 1. Add cache to /vacancies endpoint since it must be the most called endpoint
 2. Decope the domain from spring data (create JPA entity on another class on adapter package)
 3. Use domain-specific exceptions and RestException only on the adapter leayer
+4. Add workflow to publish docker image when pushing to main branch
 
 ## ⏯️ Running the code
 1. Build with Gradle
