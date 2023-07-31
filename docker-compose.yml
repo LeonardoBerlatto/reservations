@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  reservations:
+    image: reservations
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - reservations
+    environment:
+      DB_HOST: reservations-db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - reservations-db
+
+  reservations-db:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: reservations
+    ports:
+      - "5432:5432"
+    networks:
+      - reservations
+
+networks:
+  reservations:
+    driver: bridge
