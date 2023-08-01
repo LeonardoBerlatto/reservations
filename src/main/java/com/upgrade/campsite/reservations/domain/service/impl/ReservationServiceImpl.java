@@ -32,7 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.findConflictingByArrivalDateAndDepartureDate(reservation.getArrivalDate(), reservation.getDepartureDate())
                 .stream()
                 .findAny()
-                .ifPresent(r -> {
+                .ifPresent(reservation -> {
                     throw new ExistingResourceException("Reservation not available for the selected period");
                 });
 
