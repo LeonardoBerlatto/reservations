@@ -55,7 +55,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .stream()
                 .filter(reservation -> !id.equals(reservation.getId()))
                 .findAny()
-                .ifPresent(r -> {
+                .ifPresent(reservation -> {
                     throw new ExistingResourceException("Reservation not available for the selected period");
                 });
 
